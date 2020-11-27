@@ -8,12 +8,13 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Entity\BlogPost ;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  *  @ApiResource()
  * @ORM\Entity(repositoryClass=UserRepository::class)
  */
-class User
+class User implements UserInterface
 {
     /**
      * @ORM\Id
@@ -126,4 +127,17 @@ class User
         return $this->comments;
     }
 
+    public function getRoles()
+    {
+        return ['ROLE_USER'] ;
+    }
+
+    public function getSalt()
+    {
+        return null ;
+    }
+
+    public function eraseCredentials(){
+
+    }
 }
