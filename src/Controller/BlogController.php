@@ -67,7 +67,7 @@ class BlogController extends AbstractController
     /**
      * @Route("/post/{id}", name="blog_delete",requirements={"id"="\d+"}, methods={"DELETE"})
      */
-    public function delete(Request $request)
+    public function delete($id)
     {   
         $em = $this->getDoctrine()->getManager();
         $em->remove();
