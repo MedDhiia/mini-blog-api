@@ -9,10 +9,17 @@ use App\Entity\BlogPost ;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups ;
 
 /**
- *  @ApiResource()
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ApiResource(
+ *      itemOperations={"get"},
+ *      collectionOperations={},
+ *      normalizationContext={
+ *          "groups"={"read"}
+ *      }
+ * )
  */
 class User implements UserInterface
 {
@@ -25,6 +32,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read"})
      */
     private $username;
 
@@ -35,6 +43,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read"})
      */
     private $name;
 
@@ -45,11 +54,13 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\BlogPost", mappedBy="author")
+     * @Groups({"read"})
      */
     private $posts ;
 
     /**
      * @ORM\OneTOMany(targetEntity="App\Entity\BlogPost", mappedBy="author")
+     * @Groups({"read"})
      */
     private $comments ;
 

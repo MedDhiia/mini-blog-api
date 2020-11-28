@@ -12,7 +12,10 @@ use App\Entity\Comment ;
 
 /**
  * @ORM\Entity(repositoryClass=BlogPostRepository::class)
- * @ApiResource()
+ * @ApiResource(
+ *      itemOperations ={"get"},
+ *      collectionOperations={"get"}
+ * )
  */
 class BlogPost
 {
