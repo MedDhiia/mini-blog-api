@@ -6,6 +6,9 @@ use App\Repository\BlogPostRepository;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\User ;
+use App\Entity\Comment ;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Entity(repositoryClass=BlogPostRepository::class)
@@ -42,9 +45,24 @@ class BlogPost
     private $author ;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="BlogPost")
+     */
+    private $comments ;
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $slug;
+
+    public function __construct() 
+    {
+        $this->comments = new ArrayCollection();
+    }
+
+    public function getComments(): Collection
+    {
+        $this->comments ; 
+    }
 
     public function getId(): ?int
     {
