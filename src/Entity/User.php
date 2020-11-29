@@ -16,7 +16,11 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ApiResource(
- *      itemOperations={"get"},
+ *      itemOperations={
+ *          "get"={
+ *              "access_control"="is_granted('IS_AUTHENTICATED_FULLY')"
+ *          }
+ *      },
  *      collectionOperations={"post"},
  *      normalizationContext={
  *          "groups"={"read"}
