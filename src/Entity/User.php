@@ -26,7 +26,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *          "put"={
  *              "access_control"="is_granted('IS_AUTHENTICATED_FULLY') and object == user",
  *              "denormalization_context"={
- *                  "groups"={"pu"}
+ *                  "groups"={"put"}
+ *              },
+ *              "normalization_context"={
+ *                  "groups"={"get"}
  *              }
  *          }
  *      },
@@ -34,6 +37,9 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *          "post"={
  *              "denormalization_context"={
  *                  "groups"={"post"}
+ *              },
+ *              "normalization_context"={
+ *                  "groups"={"get"}
  *              }
  *          }
  *      }
