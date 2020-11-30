@@ -18,12 +18,24 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ApiResource(
  *      itemOperations={
  *          "get"={
- *              "access_control"="is_granted('IS_AUTHENTICATED_FULLY')"
+ *              "access_control"="is_granted('IS_AUTHENTICATED_FULLY')",
+ *              "normalization_context"={
+ *                  "groups"={"get"}
+ *              }
+ *          },
+ *          "put"={
+ *              "access_control"="is_granted('IS_AUTHENTICATED_FULLY') and object == user",
+ *              "denormalization_context"={
+ *                  "groups"={"pu"}
+ *              }
  *          }
  *      },
- *      collectionOperations={"post"},
- *      normalizationContext={
- *          "groups"={"read"}
+ *      collectionOperations={
+ *          "post"={
+ *              "denormalization_context"={
+ *                  "groups"={"post"}
+ *              }
+ *          }
  *      }
  * )
  * @UniqueEntity("username")
@@ -40,7 +52,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read"})
+     * @Groups({"get", "post"})
      * @Assert\NotBlank()
      * @Assert\Length(min=6, max=255)
      */
@@ -48,6 +60,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"put", "post"})
      * @Assert\NotBlank()
      * @Assert\Regex(
      *      pattern="/(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{7,}/",
@@ -57,6 +70,7 @@ class User implements UserInterface
     private $password;
 
     /**
+     * @Groups({"put", "post"})
      * @Assert\NotBlank()
      * @Assert\Expression(
      *      "this.getPassword() === this.getRetypedPassword()",
@@ -67,7 +81,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read"})
+     * @Groups({"get", "put", "post"})
      * @Assert\NotBlank()
      * @Assert\Length(min=6, max=255)
      */
@@ -75,6 +89,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"put", "post"})
      * @Assert\NotBlank()
      * @Assert\Email()
      * @Assert\Length(min=6, max=255)
@@ -83,13 +98,13 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\BlogPost", mappedBy="author")
-     * @Groups({"read"})
+     * @Groups({"get"})
      */
     private $posts ;
 
     /**
      * @ORM\OneTOMany(targetEntity="App\Entity\BlogPost", mappedBy="author")
-     * @Groups({"read"})
+     * @Groups({"get"})
      */
     private $comments ;
 
