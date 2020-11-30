@@ -2,21 +2,41 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\BlogPost;
+use App\Entity\Comment;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use App\Entity\BlogPost;
-use App\Entity\User;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Faker ;
-use App\Entity\Comment;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
-{   
+{
     private $passwordEncoder ;
     private $faker ;
+    const USERS = [
+        [
+            'username' => 'test_1',
+            'email' => 'test_1@test.com',
+            'name' => 'test_1',
+            'password' => 'Test_1'
+        ],
+        [
+            'username' => 'test_2',
+            'email' => 'test_2@test.com',
+            'name' => 'test_2',
+            'password' => 'Test_2'
+        ],
+        [
+            'username' => 'test_3',
+            'email' => 'test_3@test.com',
+            'name' => 'test_3',
+            'password' => 'Test_3'
+        ]
+    ];
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder) {
-
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    {
         /**
          * @var UserPasswordEncoderInterface
          */
@@ -37,56 +57,65 @@ class AppFixtures extends Fixture
 
     public function loadBlogPosts(ObjectManager $manager)
     {
-        $user = $this->getReference('user_admin');
-
-        for ($i=0; $i < 100 ; $i++) { 
+        for ($i = 0; $i < 100 ; $i++) {
             $blogPost = new BlogPost();
             $blogPost->setTitle($this->faker->realText(30));
             $blogPost->setPublished($this->faker->dateTimeThisYear());
-            $blogPost->setAuthor($user);
+            $authorReference = $this->getRandomUserReference() ;
+            $blogPost->setAuthor($authorReference);
             $blogPost->setContent($this->faker->realText());
             $blogPost->setSlug($this->faker->slug);
 
             $manager->persist($blogPost);
             $this->setReference("blog_post_$i", $blogPost);
         }
-    
+
         $manager->flush();
     }
-    
+
     public function loadComments(ObjectManager $manager)
     {
-        $user = $this->getReference('user_admin');
-
-        for ($i=0; $i < 100 ; $i++) { 
-            for ($j=0; $j < rand(1, 10); $j++) { 
+        for ($i = 0; $i < 100 ; $i++) {
+            for ($j = 0; $j < rand(1, 10); $j++) {
                 $comments = new Comment();
                 $comments->setContent($this->faker->realText());
                 $comments->setPublished($this->faker->dateTimeThisYear());
-                $comments->setAuthor($this->getReference('user_admin'));
+                $authorReference = $this->getRandomUserReference() ;
+                $comments->setAuthor($authorReference);
                 $comments->setBlogPost($this->getReference("blog_post_$i"));
 
                 $manager->persist($comments);
             }
         }
-    
+
         $manager->flush();
     }
-    
-    public function loadUsers (ObjectManager $manager)
+
+    public function loadUsers(ObjectManager $manager)
     {
-        $user = new User();
-        $user->setEmail('admin@blog.tn');
-        $user->setName('Bel Karoui Med Dhia');
-        $user->setUsername('admin');
-        $user->setPassword($this->passwordEncoder->encodePassword(
-            $user,
-            'admin'
-        ));
+        foreach (self::USERS as $userFixture) {
+            $user = new User();
+            $user->setEmail($userFixture['email']);
+            $user->setName($userFixture['name']);
+            $user->setUsername($userFixture['username']);
+            $user->setPassword($this->passwordEncoder->encodePassword(
+                $user,
+                $userFixture['password']
+            ));
 
-        $this->addReference('user_admin', $user);
-
-        $manager->persist($user);
+            $this->addReference('user_'.$userFixture['username'], $user);
+            $manager->persist($user);
+        }
         $manager->flush($user);
+    }
+
+    /**
+     * Select Random user.
+     *
+     * @return User
+     */
+    protected function getRandomUserReference() : User
+    {
+        return $this->getReference('user_'.self::USERS[rand(0, 2)]['username']) ;
     }
 }
