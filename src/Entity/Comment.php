@@ -11,8 +11,18 @@ use App\Entity\BlogPost ;
 /**
  * @ORM\Entity(repositoryClass=CommentRepository::class)
  * @ApiResource(
- *      itemOperations ={"get"},
- *      collectionOperations={"get"}
+ *      itemOperations ={
+ *          "get",
+ *          "put"={
+ *              "access_control"="is_granted('IS_AUTHENTICATED_FULLY') and object.getAuthor() == user"
+ *          }
+ *      },
+ *      collectionOperations={
+ *          "get",
+ *          "post"={
+ *              "access_control"="is_granted('IS_AUTHENTICATED_FULLY')"
+ *          }
+ *      }
  * )
  */
 class Comment
