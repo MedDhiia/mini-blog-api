@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CommentRepository;
 use App\Entity\AuthoredEntityInterface;
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Entity\PublishedDateEntityInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -27,7 +28,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *      }
  * )
  */
-class Comment implements AuthoredEntityInterface
+class Comment implements AuthoredEntityInterface, PublishedDateEntityInterface
 {
     /**
      * @ORM\Id
@@ -80,7 +81,7 @@ class Comment implements AuthoredEntityInterface
         return $this->published;
     }
 
-    public function setPublished(?\DateTimeInterface $published): self
+    public function setPublished(?\DateTimeInterface $published): PublishedDateEntityInterface
     {
         $this->published = $published;
 
