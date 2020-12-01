@@ -10,6 +10,7 @@ use App\Entity\AuthoredEntityInterface;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\PublishedDateEntityInterface;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups ;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -32,7 +33,7 @@ use Symfony\Component\Validator\Constraints as Assert ;
  *      },
  *      denormalizationContext={
  *          "groups"={"post"}
- *      }
+ *      } 
  * )
  */
 class BlogPost implements AuthoredEntityInterface, PublishedDateEntityInterface
@@ -73,6 +74,7 @@ class BlogPost implements AuthoredEntityInterface, PublishedDateEntityInterface
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="blogPost")
+     * @ApiSubresource()
      */
     private $comments ;
 

@@ -53,12 +53,13 @@ class User implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"get-comment-with-author"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"get", "post"})
+     * @Groups({"get", "post", "get-comment-with-author"})
      * @Assert\NotBlank()
      * @Assert\Length(min=6, max=255)
      */
