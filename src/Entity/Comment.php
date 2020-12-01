@@ -9,7 +9,9 @@ use App\Repository\CommentRepository;
 use App\Entity\AuthoredEntityInterface;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\PublishedDateEntityInterface;
+use Symfony\Component\Serializer\Annotation\Groups ;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert ;
 
 /**
  * @ORM\Entity(repositoryClass=CommentRepository::class)
@@ -25,6 +27,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *          "post"={
  *              "access_control"="is_granted('IS_AUTHENTICATED_FULLY')"
  *          }
+ *      },
+ *      denormalizationContext={
+ *          "groups"={"post"}
  *      }
  * )
  */
@@ -39,6 +44,9 @@ class Comment implements AuthoredEntityInterface, PublishedDateEntityInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"post"})
+     * @Assert\NotBlank()
+     * @Assert\Length(max=3000)
      */
     private $content;
 
