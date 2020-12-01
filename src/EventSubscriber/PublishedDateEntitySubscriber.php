@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class AuthoredEntitySubscriber implements EventSubscriberInterface
+class PublishedDateEntitySubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
