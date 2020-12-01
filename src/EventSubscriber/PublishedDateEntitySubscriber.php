@@ -23,9 +23,6 @@ class PublishedDateEntitySubscriber implements EventSubscriberInterface
         $entity = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
 
-        /** @var UserInterface $author  */
-        $author = $this->tokenStorage->getToken()->getUser() ;
-
         if (! $entity instanceof PublishedDateEntityInterface || Request::METHOD_POST !== $method) {
             return ;
         }
