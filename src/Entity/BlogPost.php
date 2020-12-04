@@ -30,7 +30,11 @@ use Symfony\Component\Validator\Constraints as Assert ;
  *          }
  *      },
  *      collectionOperations={
- *          "get",
+ *          "get"={
+ *              "normalization_context"={
+ *                  "groups"={"get-blog-post-with-author"}
+ *              }
+ *          }, 
  *          "post"={
  *              "access_control"="is_granted('ROLE_WRITER')"
  *          }
