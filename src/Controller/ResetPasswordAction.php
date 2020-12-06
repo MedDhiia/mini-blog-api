@@ -38,6 +38,7 @@ class ResetPasswordAction
                 $data->getNewPassword()
             )
         );
+        $data->setPasswordChangeDate(time());
 
         $this->entityManager->flush();
 
