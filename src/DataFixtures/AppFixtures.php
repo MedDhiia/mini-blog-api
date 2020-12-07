@@ -121,6 +121,7 @@ class AppFixtures extends Fixture
             ));
 
             $user->setRoles($userFixture['roles']);
+            $user->setIsEnable(true);
 
             $this->addReference('user_'.$userFixture['username'], $user);
             $manager->persist($user);
